@@ -1,0 +1,21 @@
+DBTRANS:Apply Transcendental Functions to a Data File
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS\
+OUTPATH\
+CODE:
+Function Control Codes
+   0 -> Sine of Data
+   1 -> Cosine of Data
+   2 -> Tangent of Data
+   3 -> Inverse Sine of Data
+   4 -> Inverse Cosine of Data
+   5 -> Inverse Tangent of Data
+   6 -> Sinh of Data
+   7 -> Cosh of Data
+   8 -> Tanh of Data
+   9 -> Inverse Sinh of Data
+  10 -> Inverse Cosh of Data
+  11 -> Inverse Tanh of Data\

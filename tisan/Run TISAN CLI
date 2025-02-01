@@ -1,0 +1,4 @@
+#!/bin/zsh
+
+cd /Users/Eric/Desktop/distribution/tisan
+./tisan

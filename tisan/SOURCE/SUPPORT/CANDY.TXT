@@ -1,0 +1,10 @@
+CANDY:Process Data in From Disk
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS: Default -> 'cdy'\
+OUTPATH\
+CODE:
+Process Control Codes
+   0 -> Process 0\

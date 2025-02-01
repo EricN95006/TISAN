@@ -1,0 +1,13 @@
+FIT:Fourier Integral Transform
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS:Output Class, Default='fit'\
+OUTPATH\
+TRANGE: Frequency Range\
+FACTOR: Number of Integration Points\
+CODE:
+Transform Control Codes
+   0 -> FIT
+   1 -> Inverse FIT\

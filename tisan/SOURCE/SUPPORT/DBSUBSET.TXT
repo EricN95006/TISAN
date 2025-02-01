@@ -1,0 +1,20 @@
+DBSUBSET:Create a Subset of a Data File
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS\
+OUTPATH\
+TRANGE\
+YRANGE\
+CODE:
+Edit Control Codes
+  0-> Delete outside T-range
+  1-> Delete inside T-range
+  2-> Delete outside A-range
+  3-> Delete inside A-range
+  4-> Delete outside T- and A-range
+  5-> Delete inside T- and A-range
+  6-> Remove duplicates
+  7-> Remove sorted duplicates
+  8-> Save TR[2] Records from TR[1]\

@@ -1,0 +1,11 @@
+FFT:Fast Fourier Transform
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS:Output Class, Default='fft'\
+OUTPATH\
+CODE:
+Transform Control Codes
+   0 -> FFT
+   1 -> Inverse FFT\

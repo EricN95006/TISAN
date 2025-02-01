@@ -1,0 +1,24 @@
+DBMOD:Modify a Range of Data in Data File
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS\
+OUTPATH\
+TRANGE\
+FACTOR:
+Factor for real files\
+ZFACTOR:
+Factor for complex files\
+CODE:
+Operation Control Code
+  -1 -> Custom Operation
+   0 -> Add Factor
+   1 -> Multiply by Factor
+   2 -> Divide by Factor
+   3 -> Divide into Factor
+   4 -> Raise to Factor Power
+   5 -> Log in Base Factor
+   6 -> Anti-log in Base Factor
+   7 -> Unbiased Round
+   8 -> Subtract Mean\

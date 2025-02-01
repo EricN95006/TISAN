@@ -1,0 +1,14 @@
+IMEAN:Determine Basic Statistics on a Range of Data
+INNAME\
+INCLASS\
+INPATH\
+TRANGE\
+TFORMAT\
+YFORMAT\
+CODE:
+Completion Control Codes
+ 1->FACTOR=-Mean,ZFACTOR=-zMean
+ 2->FACTOR=Min,ZFACTOR=zMin
+   TRANGE=T+/-1Point
+ 3->FACTOR=Max,ZFACTOR=zMax
+   TRANGE=T+/-1Point\

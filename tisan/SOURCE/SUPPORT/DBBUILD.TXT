@@ -1,0 +1,23 @@
+DBBUILD:Create Data Files from a Function
+OUTNAME:Output file name\
+OUTCLASS: Default -> 'tsn'\
+OUTPATH:Output file path\
+CODE:
+Function to Use
+   0 -> Sine
+   1 -> Sinc
+   2 -> Exponential
+   3 -> Gaussian
+   4 -> Random\
+ITYPE:
+Type of Output File
+   0 -> Real time series
+   1 -> Real Time Labeled
+   2 -> Complex time series
+   3 -> Complex time labeled\
+FACTOR: Number of Data Points\
+TRANGE\
+PARMS: Function specific Parameters\
+TITLE\
+TLABEL\
+YLABEL\

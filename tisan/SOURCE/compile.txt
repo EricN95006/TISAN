@@ -1,0 +1,32 @@
+#!/bin/bash
+set -o verbose
+
+gcc help.c dos.c tisanlib.c -o help
+
+./help
+
+gcc tisan.c  tisanlib.c dos.c verbs.c pverbs.c -Wall -o tisan
+
+gcc dbcalc.c   tisanlib.c dos.c -Wall -o DBCALC
+gcc dbmod.c    tisanlib.c dos.c -Wall -o DBMOD
+gcc dbtrans.c  tisanlib.c dos.c -Wall -o DBTRANS
+gcc dbx.c      tisanlib.c dos.c -Wall -o DBX
+gcc dbblock.c  tisanlib.c dos.c -Wall -o DBBLOCK
+gcc pgram.c    tisanlib.c dos.c -Wall -o PGRAM
+gcc dcdft.c    tisanlib.c dos.c -Wall -o DCDFT
+gcc dft.c      tisanlib.c dos.c -Wall -o DFT
+gcc fft.c      tisanlib.c dos.c -Wall -o FFT
+gcc kalman.c   tisanlib.c dos.c -Wall -o KALMAN
+gcc fit.c      tisanlib.c dos.c -Wall -o FIT
+gcc dbsmooth.c tisanlib.c dos.c -Wall -o DBSMOOTH
+gcc dbcmb.c    tisanlib.c dos.c -Wall -o DBCMB
+gcc dbsubset.c tisanlib.c dos.c -Wall -o DBSUBSET
+gcc histo.c    tisanlib.c dos.c -Wall -o HISTO
+gcc dbcon.c    tisanlib.c dos.c -Wall -o DBCON
+gcc dblist.c   tisanlib.c dos.c -Wall -o DBLIST
+gcc dbplot.c   tisanlib.c dos.c -Wall -o DBPLOT
+gcc dbsort.c   tisanlib.c dos.c -Wall -o DBSORT
+gcc dbscale.c  tisanlib.c dos.c -Wall -o DBSCALE
+gcc imean.c    tisanlib.c dos.c -Wall -o IMEAN
+gcc dbfit.c    tisanlib.c dos.c -Wall -o DBFIT
+

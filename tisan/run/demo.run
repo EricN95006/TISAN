@@ -1,0 +1,100 @@
+rem
+rem This run file builds a TISAN data file from a SINE function and
+rem then does an Fast Fourier Transform, Discrete Fourier Transform,
+rem Fourier Integral Transform and a Data Compensated Discrete Fourier Transform.
+rem It then graphs all those transforms together in a single plot with each
+rem transform in its own quadrant and in a different color.
+rem
+
+defaults
+
+rem noecho
+
+quiet 0 ; rem in case we don't want all the verbose output later...
+
+rem
+rem Build a sine function data file in the data subdirectory
+rem
+
+task dbbuild
+
+outname 'sine'
+outpath 'data'
+factor 400               ; rem not a power of 2 to see effect on the FFT
+trange 0 3.1415926536
+parms 0.5 25.1327412287 0
+
+tlabel 'frequency (Hz)'
+ylabel 'no units'
+title '0.5 sin((2pi/0.25) t)'
+
+go
+
+trange 0 ; parms 0 ; factor 0 ; rem we will be using the default values from here on
+
+rem
+rem Now perform FFT, DFT, FIT and DCDFT
+rem Change the outclass so we can use wild cards for plotting later on
+rem by looking for file extensions that start with X
+rem
+
+inname outname
+inclass 'tsn'
+inpath outpath
+
+outname ''
+outpath ''
+
+task FFT
+code 0
+outclass 'Xfft'
+go
+
+task DFT
+outclass 'Xdft'
+go
+
+task FIT
+outclass 'Xfit'
+go
+
+task DCDFT
+outclass 'Xdcd'
+go
+
+rem
+rem Now to plot up at the Fourier transform files we just created in one plot
+rem with each one in its own quadrant
+rem
+
+task dbplot
+point 640  ; rem Canvas is 640 x 640
+window 320 320 640 640 ; rem FFT in quadrant 1
+
+inclass 'Xfft'
+outclass '' ; rem default outclass is bmp
+title 'FFT'
+go
+
+window 0 320 320 640 ; rem DFT in quadrant 2
+inclass 'Xdft'
+in2n inname
+in2class 'bmp'
+in2path inpath
+title 'DFT'
+color 255 ; rem 0x0000FF = Blue
+go
+
+window 0 0 320 320 ; rem FIT in quadrant 3
+inclass 'Xfit'
+title 'FIT'
+color 65280 ; rem 0x00FF00 = Green
+go
+
+window 320 0 640 320 ; rem DCDFT in quadrant 4
+inclass 'Xdcd'
+title 'DCDFT'
+color 16711680 ; rem 0xFF0000 = Red
+go
+
+end

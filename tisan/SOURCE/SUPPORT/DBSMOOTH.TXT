@@ -1,0 +1,12 @@
+DBSMOOTH:Smooth a Data File
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS\
+OUTPATH\
+FACTOR\
+CODE:
+Smoothing Operation Code
+   0 -> Kalman Filter Smooth
+   1 -> Boxcar Smooth\

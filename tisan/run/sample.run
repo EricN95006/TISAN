@@ -1,0 +1,84 @@
+rem
+rem This is a sample RUN file that will convert a binary data file into a TISAN file
+rem plot it up, generate histogram, scale the histogram, do a Gaussian fit
+rem to the scaled histogram data and then plot both the data and the fit together.
+rem
+
+defaults
+
+rem noecho
+
+
+quiet 0 ; rem in case we don't want all the verbose output later...
+
+rem
+rem convert all the banana.bin file into TISAN file in the data directory.
+rem
+rem The banana.bin file is geiger counter data taken using an RM-60 counter and
+rem a LabVIEW data acquisition program running on a very old Windows98 laptop.
+rem
+
+task dbcon
+
+inname 'banana'
+inpath 'data'
+inclass 'bin'
+outclass 'tsn'
+
+tlabel 'seconds'
+ylabel 'microrads/hour'
+title 'RM-60 Banana Data'
+
+code 3
+go
+
+rem
+rem now make a quick plot of the banana.tsn file we just created
+rem
+
+task dbplot
+inclass 'tsn'
+outclass ''
+go
+
+rem
+rem now make a histogram and plot it
+rem
+
+task histo
+outclass 'hst'
+factor 0
+go
+
+rem
+rem Scale the histogram file by a factor of 100 so we can do a Gaussian fit.
+rem I the histogram is not scaled the fit will not converge (try it)
+rem
+task dbscale
+code 3
+yrange[1] 100
+inclass outclass
+go
+
+rem
+rem Now plot the fit with the actual data
+rem
+task dbfit
+outname 'gaussianfit'
+code 3 ; rem create an output file of the fit and update PARMS in the INPUTS file for this task
+itype 1 ; rem Guassian fit
+parms 20, 10, 0.2, 0 ; rem initial guess is 20 exp((t - 10)^2) found by inspection
+go
+
+task dbplot
+inname '*'
+inclass 'hst'
+outclass 'bmp'
+yrange 0
+parms 0
+
+ylabel 'microrads/hour divided by 100'
+
+go
+
+end

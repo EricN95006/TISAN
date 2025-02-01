@@ -1,0 +1,33 @@
+DBPLOT:Plot Data to a BMP File
+INNAME\
+INCLASS\
+INPATH\
+IN2NAME: 2nd File Name,  Default -> NONE\
+IN2CLASS: 2nd File Class, Default -> NONE\
+IN2PATH: 2nd File Path,  Default -> NONE\
+OUTNAME\
+OUTCLASS:Output Class, Default='bmp'\
+OUTPATH\
+POINT: Canvas Size, Default=640\
+FACTOR: Data Skip Interval\
+TRANGE\
+YRANGE\
+WINDOW\
+TFORMAT\
+YFORMAT\
+FRAME\
+BORDER\
+COLOR: Color as 0x00RRGGBB\
+TMAJOR\
+TMINOR\
+YMAJOR\
+YMINOR\
+TLABEL\
+YLABEL\
+TITLE\
+PARMS:
+[1]-Label Location  [2]-T Tics
+[3]-Y Tics          [4]-Symbols
+[5]-Line Type       [6]-T Log Base
+[7]-Y Log Base      [8]-T End Label
+[9]-Y End Labeling  [10]-Label H/V\

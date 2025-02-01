@@ -1,0 +1,15 @@
+DBBLOCK:Accumulate Data in Blocks
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS:Output Class, Default='blk'\
+OUTPATH\
+FACTOR:
+Block size\
+CODE:
+Operation Control Code
+   0 -> FACTOR = Data Point Count
+   1 -> FACTOR = Time Window\
+PARMS:
+[1] -> Jitter\

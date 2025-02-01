@@ -1,0 +1,10 @@
+TAFFY:Process Data in Memory
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS: Default -> 'tfy'\
+OUTPATH\
+CODE:
+Process Control Codes
+   0 -> Process 0\

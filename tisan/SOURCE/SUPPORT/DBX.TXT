@@ -1,0 +1,13 @@
+DBX:Extract Elements of a Complex Data File
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS\
+OUTPATH\
+CODE:
+Extraction Control Codes
+   0 -> Extract Amplitude
+   1 -> Extract Phase
+   2 -> Extract Real Part
+   3 -> Extract Imaginary Part\

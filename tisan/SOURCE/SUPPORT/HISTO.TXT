@@ -1,0 +1,9 @@
+HISTO:Histogram of a Data File
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS:Output Class, Default='hst'\
+OUTPATH\
+FACTOR:
+Value multiplier\

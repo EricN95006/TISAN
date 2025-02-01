@@ -1,0 +1,16 @@
+DBLIST:List Data in a Multitude of Formats
+INNAME\
+INCLASS\
+INPATH\
+CODE:
+Output Format Codes
+  0 -> Single Column
+  1 -> FACTOR Column Pairs
+  2 -> FACTOR Column Table\
+FACTOR\
+TRANGE\
+TFORMAT\
+YFORMAT\
+TLABEL\
+YLABEL\
+TITLE\

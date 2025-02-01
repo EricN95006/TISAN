@@ -1,0 +1,18 @@
+DBSCALE:Scale Amplitude or Time Value of a File
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS\
+OUTPATH\
+TRANGE: New time range or offset\
+YRANGE: New amplitude range or offset\
+ZRANGE: Complex data offset\
+CODE:
+Scaling Control Codes
+   0 -> New TRANGE and YRANGE
+   1 -> Apply simple offsets
+   2 -> Apply a multiplier
+   3 -> Apply a divisor
+   4 -> Divide into dividend
+   5 -> Set start time to zero\

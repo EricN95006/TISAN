@@ -1,0 +1,14 @@
+KALMAN:Kalman Filter Data Redistribution
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS:Output Class, Default='kal'\
+OUTPATH\
+FACTOR:Number of Output Points\
+CODE:
+POINT Adverb Control Code
+   0 -> POINT[1] is % Error
+   1 -> POINT[1] is RMS Error
+   2 -> POINT is r, q\
+POINT:Input Value for r and q\

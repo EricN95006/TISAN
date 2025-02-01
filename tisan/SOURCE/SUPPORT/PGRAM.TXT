@@ -1,0 +1,14 @@
+PGRAM:Modified Scargle Periodogram
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS:Output Class, Default='pgm'\
+OUTPATH\
+TRANGE: Frequency Range\
+FACTOR: Number of Integration Points\
+CODE:
+Scaling Control Codes
+   0 -> No Scaling
+   1 -> Scale by Variance
+   2 -> Scale as Probability\

@@ -1,0 +1,22 @@
+DBCMB:Combine Data Files in Various Ways
+INNAME\
+INCLASS\
+INPATH\
+IN2NAME\
+IN2CLASS\
+IN2PATH\
+OUTNAME\
+OUTCLASS\
+OUTPATH\
+ZFACTOR\
+FACTOR\
+CODE:
+Execution Control Code
+   0 -> DB1 + (Factor * DB2)
+   1 -> DB1 * DB2
+   2 -> DB1 / DB2
+   3 -> DB1 Raised to the DB2 Power
+   4 -> Log(DB1) in Base DB2
+   5 -> Append DB2 to DB1
+   6 -> Interleave DB1 with DB2
+   7 -> Convolve DB1 and DB2\

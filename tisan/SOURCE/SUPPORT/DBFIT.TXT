@@ -1,0 +1,27 @@
+DBFIT:Fit Functions to a Data Set
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS:Output Class, Default='dbfit'\
+OUTPATH\
+CODE:
+Control Codes
+   1 -> Update PARMS in input file
+   2 -> Create an output file
+   3 -> Do both CODE 1 and 2\
+ITYPE:
+Function Selection
+   0 -> Polynomial of order FACTOR
+   1 -> Gaussian
+   2 -> Double Gaussian
+   3 -> Exponential
+   4 -> Sine Function\
+FACTOR:Order of a polynomial fit\
+TRANGE\
+YRANGE\
+PARMS:Initial parameter values\
+POINT:Max Iterations, Min Error\
+ZFACTOR:Lambda Start, Lambda Min\
+TMAJOR:Lambda Down, Lambda Up\
+YMAJOR:Differential Factor\

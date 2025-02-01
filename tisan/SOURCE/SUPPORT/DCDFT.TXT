@@ -1,0 +1,15 @@
+DCDFT:Data Compensated Discrete Fourier Transform
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS:Output Class, Default='dcd'\
+OUTPATH\
+TRANGE: Frequency Range\
+FACTOR: Number of Integration Points\
+CODE:
+Execution Control Codes
+   0 -> DCDFT
+   1 -> Inverse DCDFT
+   2 -> DCDFT Filter 
+   3 -> DCDFT Filter Parameters\

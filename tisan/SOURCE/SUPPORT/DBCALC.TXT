@@ -1,0 +1,13 @@
+DBCALC:Integration or Differentiation of a Data File
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS\
+OUTPATH\
+FACTOR\
+ITYPE:
+Operation Type
+   0 -> Integrate FACTOR times
+   1 -> Differentiate FACTOR times\
+CODE:Moment for Integration\

@@ -1,0 +1,1380 @@
+`HELP: Pseudoverb to Display the Help File
+
+Help is available on the Following Topics:
+
+TISAN		About the TISAN Program
+ADVERBS		List of Adverbs
+VERBS		List of Verbs
+PSEUDOVERBS	List of Pseudoverbs
+TASKS		List of Tasks
+EXPRESSIONS	TISAN Expression Evaluation
+
+To obtain help on a particular topic or item within a topic, simply type HELP followed by the word of interest.  As with most TISAN operations, HELP requires only enough characters to make a minimum match.
+
+Remember, TISAN is shareware. If you use it, please give the proper attribution and citations. Please send all correspondence to:
+
+Eric R. Nelson, Ph.D.
+nelsone95033@gmail.com
+
+January 31, 2025
+`
+
+`TISAN: TIme Series Analysis eNvironment
+
+TISAN is command line driven data analysis package.  It was written as part of the work on my Ph.D. in physics/astronomy at the University of New Mexico Department of Physics and Astronomy (1988).  The original program was written in Microsoft C 2.0 for DOS 2.1.  This unix based version represents an improvement over the original environment.  I made enough changes to get it to function on the unix command line for MacOS (any of them) so there are a number of legacy elements still present (references to CGA and Hercules graphics hardware come to mind). I did not do a complete rewrite (I'm not that ambitious). I do not provide support for the software. I do make modifications as I stumble across issues or think of simple improvements, but I won't necessarily fix issues found by others and provide updates. If you fix/add something and send it to me, I will update the distribution package (once I have tested it of course).
+
+The architecture is similar to that of the Astronomical Image Processing System (AIPS) produced by the National Radio Astronomy Observatory (NRAO). I began the project before the C language was standardized and after I had been working in FORTRAN for some time. As a result, you will find that some of the code has a definite FORTRAN look to it. It was also my first large C project, so I had a few poor coding habits in those early days. The program was designed to handle large data sets, so most of the tasks process records one at a time from mass storage. A few tasks, such as dbsort, do require that all the data fit into the available memory, but that constraint has become much less of an issue since the 1980s.
+
+In TISAN, programs that perform specific operations are written as separate entities (tasks) which are spawned as child processes by a simple command line interpreter (CLI).  This modular structure allows tasks to be written independently of the main program and all other tasks.  All tasks share a common set of data structures, variables and I/O routines.  This structural similarity ensures compatibility between files created by different tasks as well as communications across tasks by the CLI.  TISAN also supports this extensive on-line help facility, so the source listings need not be addressed when assigning the input values for the more complex tasks (assuming the documentation is kept up to date of course). The tasks make use of temporary files for all output, and only after the file has been successfully closed is it renamed to the target file name. This protocol ensures that good files are never overwritten by bad ones in the event that something goes wrong.
+
+At the interpreter level, variable arguments (referred to as adverbs) are used to control the execution of the tasks.  All tasks are limited to the same set of adverbs, but the adverbs can have different meanings for each task.  Aside from setting adverb values, the interpreter also supports simple single actions commands (verbs), and more complex compound commands (pseudoverbs).  TISAN is also designed to support the use of external execution files (referred to as RUN files), which can be used to process data in a production mode. You can pass the name of a RUN file to the tisan program on the command line when it is executed.
+
+TISAN is intentionally verbose when it comes to messages, so problems can be more easily identified, but the QUIET adverb can be used to get TISAN to shut up.  I suggest executing at a QUIET level of 2 when things are running smoothly.
+
+The TISAN.CFG file is used by tasks that have system specific requirements. DBPLOT, for example, plots data to a BMP memory image which is then written out to a file. The BMP file is rendered with an external viewer (preview in MacOS for example). The command template for sending the filename of the BMP file to the viewer is held in the TISAN.CFG file. You can therefore change the viewer through this configuration file. The file has a format of "key=value" which is the same as the inputs files. Every character is significant, so do not put in extra spaces or other formatting characters. See the last few lines in main() of the DBPLOT task to see how to use this file.
+
+Remember, TISAN is shareware. If you use it, please give the proper attribution and citations.  Please send all correspondence to:
+
+	Eric R. Nelson, Ph.D.
+	nelsone95033@gmail.com
+
+`
+
+`ADVERBS: Help is Available for the Following Adverbs
+
+Adverbs are variables that are set in the TISAN environment and then passed on to the tasks. Variable types are string (ASCII null terminated), short integer (two bytes), long integer (four bytes), and double precision floating point. The adverbs for serial communications were use by tasks that sent and received data to/from a server via a modem. Adding and removing adverbs is not nearly as simple as it should be (a vestige of the poor coding practices of my youth), so they are still here.  These unused adverbs can be repurposed relatively easily (changing the name, data type and description), as was done with the DATABITS adverb, which is now the PROGRESS system adverb.  I just need a good reason to change it.  The only down side is that all the existing INP files must either be edited, to reflect the new name, or deleted.
+
+BAUD		- Baud Rate for Serial Communications (unused)
+BORDER		- Draw Border Around Graph
+CODE		- Execution Code.  Implementation Dependent
+COLOR		- Color Specifier for Graphics Coded as 0x00RRGGBB
+CONFIG		- Configure system specific elements (unused)
+DEVICE		- Output Device (unused)
+FACTOR		- Numeric Factor. Implementation Dependent
+POINT		- X,Y Data Pair
+FRAME		- Draw Frame Around Graph
+IN2CLASS	- Secondary Input File Class
+IN2NAME		- Secondary Input File Name
+IN2PATH		- Tertiary Input File Path
+IN3CLASS	- Tertiary Input File Class
+IN3NAME		- Tertiary Input File Name
+IN3PATH		- Secondary Input File Path
+INCLASS		- Input File Class
+INNAME		- Input File Name
+INPATH		- Input File Path
+ITYPE		- Execution Code. Implementation Dependent
+OUTCLASS	- Output File Class
+OUTNAME		- Output File Name
+OUTPATH		- Output File Path
+PARITY		- Data Parity for Serial Communications (unused)
+PARMS		- Array of parameters used by selected tasks
+PROGRESS	- System adverb to control printing of % Complete messages
+QUIET		- System adverb to suppress the amount of output on GO
+STOPBITS	- Number of Stop Bits for Serial Communications (unused)
+TASKNAME	- Name of Current Task
+TFORMAT		- Format String for Data Display
+TITLE		- Plot Title for Graphics Display
+TLABEL		- Time Axis Label for Graphics Display
+TMAJOR		- Time Axis Major Tic-Marks
+TMINOR		- Time Axis Minor Tic-Marks
+TRANGE		- Time Range to be used
+WINDOW		- Physical Plotting Window
+YFORMAT		- Format String for Data Display
+YLABEL		- Y Axis Label for Graphics Display
+YMAJOR		- Y Axis Major Tic-Marks
+YMINOR		- Y Axis Minor Tic-Marks
+YRANGE		- Y Axis Amplitude Range
+ZFACTOR		- Complex Numeric Factor
+ZFORMAT		- Format String for Data Display
+ZLABEL		- Z Axis Label for Graphics Display
+ZMAJOR		- Z Axis Major Tic-Marks
+ZMINOR		- Z Axis Minor Tic-Marks
+ZRANGE		- Z Axis Amplitude Range
+`
+
+`VERBS: Help is Available for the Following Verbs
+
+Verbs are action commands that take no arguments.
+
+CLS		- Clear the screen
+DEFAULTS	- Reset the Adverbs to their Default Values
+ECHO		- Echo the Execution of RUN Files
+END		- Terminate the Execution of a Run File
+EXIT 		- Exit TISAN After Saving the Current Environment
+NOECHO		- Do Not Echo the Execution of RUN Files
+QUIT		- Exit TISAN Without Saving the Current Environment
+STOP		- Terminate All Run Files
+`
+
+`PSEUDOVERBS: Help is Available for the Following Pseudoverbs
+
+Pseudoverbs are action commands, like the verbs, except that they may require or take an optional argument.
+
+ASCII		- Print the ASCII value of a character, which is the argument
+CATALOG		- Display a list of files
+COPY		- Copy Disk Files
+DELETE		- Delete a Disk File
+GET		- Get Inputs from Disk
+GETHEAD		- Get Header Information from a File
+GO		- Execute a Task
+HELP		- Display TISAN Help
+PUT		- Put Inputs to Disk
+PUTHEAD		- Put Header Information to a File
+REM		- Remark for commenting RUN files
+RENAME		- Rename a Disk File
+RUN		- Execute a Run File
+SYSTEM		- Execute an external unix system command
+WAIT		- Pause Execution of a RUN file
+`
+
+`TASKS: Help is Available for the Following Tasks
+
+Tasks are the actual processing programs that perform the data analysis.
+
+DBBLOCK		- Accumulate data into blocks
+DBBUILD		- Build a data file from a function
+DBCALC		- Integration and Differentiation
+DBCMB		- Combine two data files
+DBCON		- Convert between data formats
+DBFIT           - Fit a function to a data set
+DBLIST		- Data Tabulation
+DBMOD		- Modify an existing data file using a number of mathematical operations
+DBPLOT		- Plot data files
+DBSCALE		- Change the scaling of an existing data file
+DBSMOOTH	- Data Smoothing
+DBSORT		- Sort a time labeled data file
+DBSUBSET	- Take a subset of an existing data file
+DBTRANS		- Operate transcendental functions on a data file
+DBX		- Extract components of a complex data file
+DCDFT		- Data Compensated Discrete Fourier Transform
+DFT		- Discrete Fourier Transform
+FFT		- Fast Fourier Transform
+FIT		- Fourier Integral Transform
+HISTO		- Makes a histogram file out of a data file
+IMEAN		- Display Data Ranges, Mean, and Deviation
+KALMAN		- Kalman Filter Data Redistribution
+PGRAM		- Periodogram Analysis
+`
+
+`EXPRESSIONS: TISAN Expression Evaluation
+
+The TISAN Command Line Interpreter (CLI) is simple but it can process complex compound expressions.  The TISAN expression syntax is
+
+	ADVERB [arguments]
+	VERB
+	PSEUDOVERB [arguments]
+
+where the [arguments] may be optional.  For adverbs, the arguments are separated from the command by a space.  Multiple arguments are delimited by either spaces or commas.  Verbs never take an argument.  Only enough characters to make a unique minimum match to any TISAN reserved word are necessary to complete a command.
+
+If an adverb is entered without an argument, then the value of that adverb is displayed.  Individual elements within an array may be assigned by the use of square brackets, i.e. PARMS[3] is the third element of the PARMS adverb. The arrays are [1] indexed. Using the zero index, [0], is the same as just using the adverb name. String adverbs can be treated as arrays for making changes to the text.
+
+Adverbs may be used as variable names to assign values.  For example, entering:
+
+TITLE INNAME
+
+will copy the value of the adverb INNAME to the adverb TITLE.  Notice that the syntax
+
+TITLE 'INNAME'
+
+would place the literal string INNAME into the TITLE adverb.  In fact, if the single quotes are not used for strings (only the first quote is mandatory in most cases) then the argument is converted to uppercase and tested against all the possible adverbs.  If a match is not found, then an error is displayed.
+
+A starting location of a string can be set with the use of an array index, starting at an index of [1].  For array adverbs, using just the base name can be used to set multiple elements with a single value.  For example the command
+
+PARMS 0
+
+will zero out all the elements of PARMS while the command
+
+PARMS 1 2 3 4
+
+would result in the last 7 elements of PARMS being set to 4.  The syntax 
+
+PARMS[1] 1 2 3 4
+
+however would only affect the first 4 elements of the array.
+
+Multiple commands may be entered on a single line by separating them with a semicolon.  Spaces may be used for assignment delimiters.
+
+The CLI operates on vectors.  For example POINT PARMS will assign the value of the POINT vector from the first two elements of the PARMS array.  POINT PARMS[1] will fill both POINT[1] and POINT[2] with PARMS[1] while POINT[1] PARMS[1] will only affect POINT[1] and not POINT[2].  Note that POINT[0] would be interpreted as just POINT.
+
+Most tasks can accept wild cards in the input file specifications. Those tasks will look for an '*' or '?' in the file name specification and if found will treat the name as a type of regular expression. To make things more familiar for those who do not frequently use regular expressions, the '?' is accepted to represent any character and is replaced by a '.' prior to processing. For example, to process all the '.csv' files in the 'data' directory you would set:
+
+INPATH 'data'
+INNAME '*'
+INCLASS 'csv'
+
+or to process all files files that have a file name 'bob' with an extension starting with the letter h
+
+INNAME 'bob'
+INCLASS 'h?'
+
+To process all the '.tsn' files starting with the letter d you would set
+
+INNAME '^d?*'
+INCLASS 'tsn'
+
+To process all '.tsn' files with a file name that ends in "copy" you would use
+
+INNAME '?copy'
+INCLASS 'tsn'
+
+All TISAN tasks accept wild cards in the file name and extension (some use them in the secondary filename rather than in the primary). The CATALOG adverb also accepts wild cards, so it can be used to test out your pattern matching before you use it in a task.
+`
+
+`DEFAULTS: Verb to Reset the Adverbs to their Default Values
+
+When DEFAULTS is executed, all string adverbs are set to zero length except TASKNAME which is not changed.  All numeric adverbs are set to predefined values, most of which are zero.  The QUIET level is set to 0.
+`
+
+`ECHO: Verb to Echo RUN Files
+
+ECHO is used to turn on the output of RUN files to the screen.  ECHO is the default mode every time TISAN is entered and is disabled with NOECHO. 
+`
+
+`END: Terminate the Execution of a RUN File
+
+A run file will normally terminate on reaching the End Of File.  The END command can be used to terminate the processing prematurely.  If the RUN file being executed is nested in another RUN file, then only the current RUN file is terminated.  Use STOP to end the execution of all nested RUN files.
+`
+
+`EXIT: Verb to Exit TISAN and Save the Environment
+
+EXIT will save the current inputs under the file name TISAN.INP in the INPUTS subdirectory and then exit TISAN (see QUIT).
+`
+
+`NOECHO: Verb to Suppress RUN File Echoing
+
+NOECHO is used to turn off the output of RUN files to the screen.  (see ECHO).
+`
+
+`QUIT: Verb to Exit TISAN
+
+QUIT will exit TISAN without saving the current inputs (see EXIT).
+`
+
+`STOP: Verb to Terminate all RUN Files.
+
+The STOP verb will terminate the execution of all RUN files, no matter how deeply nested.  Use END to terminate the current RUN file.
+`
+
+`ASCII: Pseudoverb to Display ASCII Values
+
+ASCII should be followed by a single non-white space character.  The ASCII value of the character will be displayed.  If the return value is negative, then the character is not part of the ASCII character set, but rather is in the extended UNICODE-8 codec or higher set.  TISAN does not recognize multi-byte characters.  This command is helpful when plotting using characters in DBPLOT.
+`
+
+`COPY: Pseudoverb to Copy Disk Files
+
+The COPY command simply executes the unix "cp" command.
+`
+
+`DELETE: Pseudoverb to Delete A Single Disk File
+
+The DELETE command requires a single argument which corresponds to the file name to be removed from the disk.  The argument may NOT include wild cards for file name specifications.  It is not possible to delete a file that has its attributes set for READ ONLY.  No adverbs are affected. If you want to do more than just delete a single file then use the SYSTEM command in conjunction with the unix "rm" command.
+`
+
+`GET: Pseudoverb to Retrieve an Environment from Disk
+
+The GET command takes an optional argument.  If no argument is given, then the current TASKNAME is used and a file is read from the INPUTS subdirectory.  The environment is changed according to the parameters in the newly loaded inputs file.  If no argument was given, then the TASKNAME will not be changed. See PUT.
+`
+
+`GETHEAD: Pseudoverb to Get Header Information from a File
+
+This pseudoverb will get the header information from an optionally specified file.  If no file is specified, then the INNAME, INCLASS, and INPATH adverbs are used for the file name.  The slope (m) and intercept (b) values for time scaling are placed in the TRANGE adverb. The TITLE, TLABEL, and YLABEL adverbs are set with that same information taken from the file header. See PUTHEAD.
+`
+
+`GO: Pseudoverb to Execute a Task
+
+The GO command takes an optional argument that specifies the task to be executed.  If no argument is provided, then the task specified by the adverb TASKNAME is used.  The outcome of the GO command is task dependent.
+`
+
+`PUT: Pseudoverb to Save the Current Environment to Disk
+
+The PUT command takes an optional argument.  If no argument is given, then the current TASKNAME is used. In either case an Inputs File is written to the INPUTS subdirectory.  No adverbs are affected. See GET.
+`
+
+`PUTHEAD: Pseudoverb to Put Header Information to a File
+
+This pseudoverb will put the header information to an optionally specified file.  If no file is specified, then the OUTNAME, OUTCLASS, and OUTPATH adverbs are used for the file name.  The TRANGE adverb is placed into the slope and intercept values. The TITLE, TLABEL, and YLABEL adverbs are written to the file header. See GETHEAD.
+`
+
+`REM: Pseudoverb for Remarking RUN Files
+
+This command will cause the interpreter to ignore the remainder of the line.  The REM pseudoverb allows for the commenting of RUN files.
+`
+
+`RENAME: Pseudoverb to Rename a Disk File
+
+This command requires two arguments.  The first argument is the current name of the file to be changed.  The second argument is the new file name.  No adverbs are affected. This command does NOT accept wild cards. If you want to do more than just rename a single file then use the SYSTEM command in conjunction with the unix "mv" command.
+`
+
+`RUN: Pseudoverb to Execute an External RUN File
+
+RUN requires a single argument that corresponds to the root name of the run file to be executed.  All run files must have an extension of '.run'.  If a path or drive specifier is not provided, then TISAN will search the 'run' subdirectory for the file.  A run file is a text file created with any text editor that holds the commands to be executed by TISAN. Be sure the editor is set to save plain text and not 'rtf' files. Also note that smart quotes cannot be used in the file because they are not part of the ASCII character set (they are 16-bit characters and are processed as two bytes rather than one).  Run files may call other run files, but if the nesting is too deep a stack overflow error will occur.  Any commands following the RUN command on the same line are ignored.
+`
+
+`WAIT: Pseudoverb to Pause During a RUN Execution
+
+WAIT will display whatever message follows the command and makes a sound.  Program execution is paused until a key is pressed by the user.
+`
+
+`BAUD: Adverb to Set the Baud Rate for Serial Communications
+
+The BAUD adverb (short) is a legacy expression that is not currently used.
+`
+
+`BORDER: Adverb for Bordering Graphics
+
+This adverb is used as a flag to determine whether a border is to be drawn around a plot.  The plot labels are written outside this border.  Any nonzero value is considered TRUE.
+`
+
+`CODE: Adverb to Set the Execution Code for a Given Task
+
+This adverb is a task dependent integer value.  Typically CODE is used to select between various options within a given task.
+`
+
+`COLOR: Adverb to Set the Line Color for Graphics
+
+The adverb is a double word integer (32 bits) that represents an RGB color value. The color is coded as 0x00RRGGBB in HEX. When displayed in an inputs listing, COLOR is displayed in HEX for easy interpretation. When entering the value it must be in base 10 and not base 16.
+`
+
+`PROGRESS: System adverb to control printing of % Complete messages
+
+The PROGRESS adverb is used by the system to control the printing of % Complete messages for tasks that use the printPercentComplete function. If it is set to less than 1, then no messages are reported, otherwise progress reports are made in intervals of PROGRESS percent. If PROGRESS is 100 or greater, then only the 0% complete message is guaranteed to be printed. The default value is 10.
+`
+
+`DEVICE: Adverb to Select an I/O Device
+
+The DEVICE adverb (8 byte char array) is a legacy expression that is not currently used.
+`
+
+`FACTOR: Adverb for a Numeric Factor
+
+This adverb is a task dependent double precision value.
+`
+
+`POINT: Adverb to Represent an X,Y Data Point
+
+POINT is a double precision X,Y vector.
+`
+
+`FRAME: Adverb for Framing Graphics
+
+This adverb is used as a flag to determine whether the physical plotting window is to be framed.  The plotting window is determined by the WINDOW adverb.  Any nonzero value is considered TRUE.
+`
+
+`IN2CLASS: Adverb to Set the Secondary Input File Class
+
+This adverb corresponds to the extension for the secondary input file.  Valid characters are the letters A through Z (case sensitive), the numbers 0 through 9, and the special characters $, ~, _, ., ? and *.
+`
+
+`IN2NAME: Adverb to Set the Secondary Input File Name
+
+This adverb corresponds to the root name for the secondary input file.  Valid characters are the letters A through Z (case sensitive), the numbers 0 through 9, and the special characters $, ~, _, ., ? and *.
+`
+
+`IN2PATH: Adverb to Set the Secondary Input File Path
+
+This adverb corresponds to the drive and directory specification for the secondary input file.  Valid characters are the letters A through Z (case sensitive), the numbers 0 through 9, the special characters $, ~, _, ., ? and * and the delimiters : and /.  The drive specification takes the usual form as a prefix to the directory specifier.
+`
+
+`IN3CLASS: Adverb to Set the Tertiary Input File Class
+
+This adverb corresponds to the extension for the tertiary input file.  Valid characters are the letters A through Z (case sensitive), the numbers 0 through 9, and the special characters $, ~, _, ., ? and *.
+`
+
+`IN3NAME: Adverb to Set the Tertiary Input File Name
+
+This adverb corresponds to the root name for the tertiary input file.  Valid characters are the letters A through Z (case sensitive), the numbers 0 through 9, and the special characters $, ~, _, ., ? and *.
+`
+
+`IN3PATH: Adverb to Set the Tertiary Input File Path
+
+This adverb corresponds to the drive and directory specification for the tertiary input file.  Valid characters are the letters A through Z (case sensitive), the numbers 0 through 9, the special characters $, ~, _, ., ? and * and the delimiters : and /.  The drive specification takes the usual form as a prefix to the directory specifier.
+`
+
+`INCLASS: Adverb to Set the Input File Class
+
+This adverb corresponds to the extension for the primary input file.  Valid characters are the letters A through Z (case sensitive), the numbers 0 through 9, and the special characters $, ~, _, ., ? and *.
+`
+
+`INNAME: Adverb to Set the Input File Name
+
+This adverb corresponds to the root name for the primary input file.  Valid characters are the letters A through Z (case sensitive), the numbers 0 through 9, and the special characters $, ~, _, ., ? and *.
+`
+
+`INPATH: Adverb to Set the Input File Path
+
+This adverb corresponds to the drive and directory specification for the primary input file.  Valid characters are the letters A through Z (case sensitive), the numbers 0 through 9, the special characters $, ~, _, ., ? and * and the delimiters : and /.  The drive specification takes the usual form as a prefix to the directory specifier.
+`
+
+`ITYPE: Adverb to Control Task Execution Modes
+
+This adverb is a task dependent short integer value, however it is normally used as a control variable similar to CODE.
+`
+
+`OUTCLASS: Adverb to Set the Output File Class
+
+This adverb corresponds to the extension for the output file.  Valid characters are the letters A through Z (case sensitive), the numbers 0 through 9, and the special characters $, ~, _, ., ? and *.  The OUTCLASS typically defaults to the INCLASS if not specified.
+`
+
+`OUTNAME: Adverb to Set the Output File Name
+
+This adverb corresponds to the root name for the output file.  Valid characters are the letters A through Z (case sensitive), the numbers 0 through 9 and the special characters $, ~, _, ., ? and *. The OUTNAME typically defaults to the INNAME if not specified.
+`
+
+`OUTPATH: Adverb to Set the Output File Path
+
+This adverb corresponds to the drive and directory specification for the output file.  Valid characters are the letters A through Z (case sensitive), the numbers 0 through 9, the special characters $, ~, _, ., ? and * and the delimiters : and /.  The drive specification takes the usual form as a prefix to the directory specifier.  The OUTPATH typically defaults to the INPATH if not specified.
+`
+
+`PARITY: Adverb to Set the Data Parity for Serial Communications
+
+The PARITY adverb (8 byte char array) is a legacy expression that is not currently used.
+`
+
+`PARMS: Adverb Array of Parameters Used by Selected Tasks
+
+This adverb is a ten element double precision array.  Its values are used by various tasks for different purposes.
+`
+
+`QUIET: Adverb to Suppress Task Information
+
+This system adverb is used to suppress printed information when a task is executed with the GO pseudoverb.  If QUIET is 1 (or 0) then all messages are displayed.  Messages with a priority lower than the QUIET setting will not be displayed.  Setting QUIET to 2 will only suppress the INPUTS listing.
+`
+
+`STOPBITS: Adverb to Set Stop Bits for Serial Communications
+
+The STOPBITS adverb (short) is a legacy expression that is not currently used.
+`
+
+`TASKNAME: Adverb to Set the Name of Current Task
+
+The current task is set by the TASKNAME adverb.  The actions of the GO, GET and PUT pseudoverbs are affected by this value.
+`
+
+`TFORMAT: Adverb to Set the Format String for Data Display
+
+This adverb will set the output format, for display of the data time base.  The syntax is %[flags][width][.precision]type. The arguments in brackets are optional.  The fields have the following meanings:
+
+WIDTH is the minimum field width.  If the printed value is larger than this prescribed width, it will overflow the field.  If WIDTH is preceded by a zero, then the value will be left filled with zeros.
+
+PRECISION is the number of digits to be printed after the decimal point for floating point values.  It corresponds to the minimum number of digits to be printed for integer, octal, and hex formats.
+
+Flags	Meaning                                   Defaults
+=====   =======                                   ========
+-	Left justify.	                          Right justify.
++	Force sign.	                          Sign not forced.
+blank	Prefix positive values with a space.      Not prefixed with a space.
+#	Force a decimal point if digits follow.
+	for decimal values...
+	Type	Output Format
+	f or lf  Non-exponential floating point format
+	e or le  Exponential floating point format using a lower case e
+	E or lE  Exponential floating point format using an upper case E
+	g or lg  Selects 'e' or 'f' type, whichever is more compact
+	G or lG  Selects 'E' or 'f' type, whichever is more compact
+
+The default format is %lG which will display the double precision values with up to six significant figures in either floating point or scientific notation, whichever yields a smaller number of characters. To print precise values use a format of %.12lG which will print up to twelve significant figures. This is the default format used in an Inputs File.
+`
+
+`TITLE: Adverb to Set a Title
+
+This adverb is a 128 character label that is normally used as a title for a plot.
+`
+
+`TLABEL: Adverb to Set a Time Axis Label
+
+This adverb is a 128 character label that is normally used to identify the time axis.
+`
+
+`TMAJOR: Adverb to Set the Time Axis Major Tic-Marks
+
+Major tic-marks are those that are labeled with numeric values.  This adverb holds two values.  This first number is the starting value of the first major tic-mark.  The second value is the offset for the remaining values.
+`
+
+`TMINOR: Adverb to Set the Time Axis Minor Tic-Marks
+
+Minor tic-marks are the unlabeled marks that are found between major tic-marks.  TMINOR is an integer that corresponds to the number of minor tic-marks between major tic-marks on the time axis.  For labeling a Log(T) axis, YMINOR represents the "decade" sub-marks, where a value of 10 would be used for Log base 10.
+`
+
+`TRANGE: Adverb to Set the Time Range to be used
+
+This value is used to select the time range to be used for a specific task.  TRANGE[1] is the first value and TRANGE[2] is the second.  If TRANGE[1] is less than or equal to TRANGE[2] then the entire range is used.
+`
+
+`WINDOW: Adverb to Set the Physical Plotting Window
+
+This four element adverb corresponds to the physical plotting limits used for graphics display.  The first two values are the lower left corner and the second two are the upper right corner.  If the upper left corner is less than the lower right, then the entire canvas will be used.  Graphics are plotted in the first quadrant, so (0,0) is the lower left corner of the canvas.  The WINDOW adverb us useful for plotting multiple files in different areas of the canvas since the in2file in DBPLOT can be a BMP file which becomes the canvas for the current plot. See the demo RUN file for an example on using this feature.
+`
+
+`YFORMAT: Adverb to Set the Format String for Data Display
+
+This adverb will set the output format for display of the data amplitude.  The default format is %lG which will display values with up to six significant figures in either floating point or scientific notation, whichever yields a smaller number of characters.  See TFORMAT for the meanings of the fields.
+`
+
+`YLABEL: Adverb to Set the Y Axis Label
+
+This adverb is a 128 character label that will be used to identify the Y-axis for graphics displays of the data and for hardcopy output.
+`
+
+`YMAJOR: Adverb to Set the Y Axis Major Tic-Marks
+
+Major tic-marks are those that are labeled with numeric values.  This adverb holds two values.  This first number is the starting value of the first major tic-mark.  The second value is the offset for the remaining values.
+`
+
+`YMINOR: Adverb to Set the Y Axis Minor Tic-Marks
+
+Minor tic-marks are the unlabeled marks that are found between major tic-marks.  YMINOR is an integer that corresponds to the number of minor tic-marks between major tic-marks on the Y-axis.  For labeling a Log(Y) axis, YMINOR represents the "decade" marks, where a value of 10 would be used for Log base 10.
+`
+
+`YRANGE: Adverb to Set the Y Axis Amplitude Range
+
+This value is used to select the amplitude range to be used for a specific task.  YRANGE[1] is the first value and YRANGE[2] is the second.  If YRANGE[1] is less than or equal to YRANGE[2], then the entire range is used.
+`
+
+`ZFACTOR: Adverb for a Complex Numeric Factor
+
+This double precision, two element adverb is implementation dependent, but is normally used as a complex (z = x + iy) value.
+`
+
+`ZFORMAT: Adverb to Set the Format String for Data Display
+
+This adverb will set the output format for display of the data amplitude for complex values.  The default format is %lG which will display values with up to six significant figures in either floating point or scientific notation, whichever yields a smaller number of characters.  See TFORMAT for the meanings of the fields.
+`
+
+`ZLABEL: Adverb to Set the Z Axis Label
+
+This adverb is a 128 character label that will be used to identify the Z-axis for graphics displays of the data and for hardcopy output.
+`
+
+`ZMAJOR: Adverb to Set the Z Axis Major Tic-Marks
+
+Major tic-marks are those that are labeled with numeric values.  This adverb holds two values.  This first number is the starting value of the first major tic-mark.  The second value is the offset for the remaining values.
+`
+
+`ZMINOR: Adverb to Set the Z Axis Minor Tic-Marks
+
+Minor tic-marks are the unlabeled marks that are found between major tic-marks.  YMINOR is an integer that corresponds to the number of minor tic-marks between major tic-marks on the Y-axis.  For labeling a Log(Z) axis, YMINOR represents the "decade" marks, where a value of 10 would be used for Log base 10.
+`
+
+`ZRANGE: Adverb to Set the Z Axis Amplitude Range
+
+This value is used to select the amplitude range to be used for a specific task.  ZRANGE[1] is the first value and ZRANGE[2] is the second.  If ZRANGE[1] is less than or equal to ZRANGE[2], then the entire range is used.
+`
+
+`DBCALC: Task to Integrate or Differentiate a Data File
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name (default is INNAME)
+OUTCLASS	Output file extension (default is INCLASS)
+OUTPATH		Output file drive and directory (default is INPATH)
+FACTOR		Number of Iterations
+ITYPE		0-> Integrate, 1-> Differentiate
+CODE		Moment of integration (t^CODE)
+
+This task will integrate or differentiate a data file FACTOR times.  If FACTOR is less than or equal to zero, then one iteration is made.  An ITYPE value of 0 will integrate, and a value of 1 will differentiate.  If ITYPE is set to 0 (integration) and FACTOR is less than 1 (one iteration by default) then an output file will NOT be created, so only the final output value of a single integration will be displayed.  Integration is performed by a simple trapezoidal rule. The moment is the number of times the discrete time interval is multiplied into the integral for each step. The equation would be
+
+	∫f(t) t^n dt
+
+where 'n' is the CODE value.
+
+The time based for the output file will not be the same as the input file. The new time values are the mid-times between the points used to do the calculations.
+
+The infile of this task accepts wild cards.
+`
+
+`DBCMB: Task to Combine Two Data Files in Various Ways
+
+Inputs		Description
+===========	==========================================
+INNAME		Primary input file root name
+INCLASS		Primary input file extension
+INPATH		Primary input file drive and directory
+IN2NAME		Secondary input file root name
+IN2CLASS	Secondary input file extension
+IN2PATH		Secondary input file drive and directory
+OUTNAME		Output file root name (default is INNAME)
+OUTCLASS	Output file extension (default is INCLSS)
+OUTPATH		Output file drive and directory (default is INPATH)
+FACTOR		Addition modifier for real data files
+ZFACTOR		Addition modifier for complex data files
+CODE		Execution Control Code
+			0 -> DB1 + FACTOR * DB2
+			1 -> DB1 * DB2
+			2 -> DB1 / DB2
+			3 -> DB1 ^ DB2
+			4 -> LOG(DB1) BASE DB2
+			5 -> Append DB2 to DB1
+			6 -> Interleave DB1 with DB2
+			7 -> Convolve DB1 and DB2
+
+DBCMB allows the user to combine two data files.  No sorting is performed after the combination, although most of the tasks require that the data be time sequential. Use IMEAN to determine if the data need to be sorted using DBSORT. The data types of both files must be the same. For time series files, the scaling values in the header of the secondary file are used for the output file. For time labeled files, the time stamp from the secondary file is used.
+
+The convolution is done by brute force by making multiple passes through the files. Fourier transforms are not used in the calculation. Time labeled files cannot be convolved since the time interval between data points must be the same, which need not be the case for arbitrary (t,y) data sets.
+
+The in2file accepts wild cards. To use this feature, make the outfile the same as the infile and give infile a name that does not match the secondary files. The code will then apply the new secondary file to the output of each previous iteration.
+
+The infile of this task accepts wild cards.
+
+`
+`DBCON: Task to Convert Between Data Formats
+
+Inputs		Description
+===========	==========================================
+INNAME		Primary input file root name (accepts wild cards)
+INCLASS		Primary input file extension (accepts wild cards)
+INPATH		Primary input file drive and directory
+OUTNAME		Output file root name (default is INNAME)
+OUTCLASS	Output file extension (default is INCLASS)
+OUTPATH		Output file drive and directory (default is INPATH)
+TITLE		Title information about the file
+TLABEL		Time axis units and label
+YLABEL		Y axis units and label
+TFORMAT		Time output format control (default is "%lG,")
+YFORMAT		Real value output format control (default is "%lG")
+ZFORMAT		Imaginary value output format control (default is ",%lG")
+TRANGE          m, b for Time Series to determine time stamp for each record
+CODE		Conversion file format
+		   1 -> Convert ASCII to TISAN
+		       1 -> Real time series file
+		      11 -> Real time labeled file
+		      21 -> Complex time series file
+		      31 -> Complex time labeled file
+		   2 -> Convert 16-bit binary integer (Intel) to TISAN
+		       2 -> Real time series file
+		      12 -> Real time labeled file
+		      22 -> Complex time series file
+		      32 -> Complex time labeled file
+		   3 -> Convert RM-60 Data to TISAN
+		   4 -> Convert TISAN to ASCII
+		       4 -> Output file reflects the current file type.
+		      14 -> Output file has time values in column 1
+		   5 -> Convert TISAN to 16-bit binary integer (Intel)
+
+This task is used to convert between file formats. When creating ASCII files the output format specifiers must include the delimiters used to distinguish one value from another. TFORMAT controls how the time is printed. YFORMAT is used to print real values and the real part of complex values. ZFORMAT is used for the imaginary part of complex values.
+
+For time series files two values are needed to calculate the time stamp for each data record: Slope m and Intercept b. TRANGE can be used to set those values. A slope of 1 and intercept of 0 are used if both values in TRANGE are zero.
+
+A CODE of 3 (13 will also work) will read in data created by the LabVIEW 4.0 FileGeiger utility that performs one minute integrations from an RM-60 Geiger counter. The output type is always a real time labeled file when using a CODE of 3. Replace this code with your own if you have custom conversion requirements.
+
+The binary integer conversions are legacy code, but they can be modified to convert to/from any binary type you need.
+
+The infile of this task accepts wild cards.
+
+`
+`DBLIST: Task for Data Tabulation
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+CODE		Output Control Code
+		   0-> Simple Single Column Output
+		   1-> Multiple Column Output in FACTOR Columns
+		   2-> Tabular Output with FACTOR columns
+FACTOR		Number of Columns
+TRANGE		Time Range to Display (default is the entire file)
+TFORMAT		Time Data Output Format (default is "%lG ")
+YFORMAT		Amplitude Data Output Format (default is "%lG ")
+TLABEL		Output Label for Time Data
+YLABEL		Output Label for Amplitude Data 
+TITLE		Output Label Title
+
+The TFORMAT and YFORMAT adverbs control the output format.  See the help information on these two adverbs for the command syntax.  The CODE adverb can be set to 0, 1, or 2 and controls how the output columns will be displayed.  The FACTOR adverb is used when CODE is nonzero to specify the number of display columns.
+
+The infile of this task accepts wild cards.
+`
+
+`DBMOD: Task to Modify the Amplitude Values in an Existing Data File
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+FACTOR		Modification Factor for real data files
+ZFACTOR		Modification Factor for complex data files
+CODE		Operation Control Code
+		   -1 -> Custom
+		    0 -> data + factor
+		    1 -> data * factor
+		    2 -> data / factor
+		    3 -> factor / data
+		    4 -> data^factor
+		    5 -> log(data)/log(factor)
+		    6 -> factor^data
+		    7 -> Unbiased Round
+		    8 -> Subtract Mean
+
+This task is used to modify the contents of an existing data file.  Should a domain error be detected (i.e., log of zero) a nonfatal warning message will be issued and the data point will be set to zero.
+
+This task can process both real and complex data types.  If the file is real, then FACTOR is used for the modification and ZFACTOR is not used, otherwise ZFACTOR[1] is the real part and ZFACTOR[2] is the imaginary term.
+
+When CODE = 7, the data are multiplied by FACTOR and then an unbiased rounding is performed. Unbiased rounding will round to an even value in the event that the decimal portion is exactly 0.5. 
+
+When CODE = 8, neither FACTOR nor ZFACTOR are used. The average value of the data set is found and subsequently subtracted from the data. Round-off errors typically result in small, but non-zero, mean values after this operation is performed.
+
+A CODE of -1 will execute a custom modification that can be easily changed in the DBMOD code base.
+
+To change the time scale of TISAN files see DBSCALE.
+
+The infile of this task accepts wild cards
+`
+
+`DBPLOT: Task to Plot Data to a BMP File
+
+Inputs		Description
+===========	==========================================
+INNAME		Primary input file root name (accepts wild cards)
+INCLASS		Primary input file extension (accepts wild cards)
+INPATH		Primary input file drive and directory
+IN2NAME		Secondary input file root name
+IN2CLASS	Secondary input file extension
+IN2PATH		Secondary input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+POINT		X,Y Canvas Size
+FACTOR		Data Skip Interval
+TRANGE		Time Range to Display
+YRANGE		Amplitude Range to Display
+WINDOW		Physical Plotting Window
+TFORMAT		Time Axis Labels Format
+YFORMAT		Amplitude Axis Labels Format
+FRAME		Draw a Frame Around the Window
+BORDER		Draw a Border Around the Plot
+COLOR		Line Color
+TMAJOR		Time Axis Major Tic-marks
+TMINOR		Time Axis Minor Tic-marks
+YMAJOR		Amplitude Axis Major Tic-marks
+YMINOR		Amplitude Axis Minor Tic-marks
+TLABEL		Time Axis Label
+YLABEL		Amplitude Axis Label
+TITLE		Plot Title
+PARMS		Control Parameters
+
+DBPLOT creates a 32-bit color bitmap file that holds the image of the plot. Since the data are plotted to memory, the processing is very fast, even for millions of data points. The default image size is 640x640, but POINT can be used to override it. The image size must be at least 320 in the x-dimension and 240 in the y-dimension, or the default dimensions will be used.
+
+If IN2NAME, IN2CLASS, and IN2PATH result in a file specifier that is different from the primary input file specifier, then the second file is read and it is used as the time base for the plot if it is a TISAN data file, resulting in a plot of the infile vs. the in2file while ignoring the time information in both. If the secondary file is a BMP image, then the new plot is overlaid upon it (the loaded BMP image becomes the canvas for the new plot).
+
+The default extension for the output file is 'bmp'. The program will NOT allow the input file to be accidentally overwritten.
+
+The primary input file name accepts wild cards, so multiple files can be plotted at the same time (see EXPRESSIONS).
+
+The PARMS array has a large number of control options that are listed below:
+
+PARMS[1]: Label Locations
+            <0 Suppress All Labels
+            100's TITLE,  0-> Top,       1-> Bottom
+             10's XLABEL, 0-> Bottom,    1-> Top
+              1's YLABEL, 0-> Left side, 1-> Right side
+
+PARMS[2]: X Tic-mark Control 
+            <0 Suppress X-axis Tic-marks
+            100's=0 Inside,       1-> Outside
+             10's=0 Double Marks, 1-> Single Marks
+              1's=0 Bottom,       1-> Top
+
+PARMS[3]: Y Tic-mark Control
+            <0 NO TICS
+            100's=0 Inside,       1-> Outside
+             10's=0 Double Marks, 1-> Single Marks
+              1's=0 Left,         1-> Right
+
+PARMS[4]: <= 0 -> Plot lines else plot points where abs(PARMS[4]) is the symbol
+PARMS[5]: Line type control (<= 0 -> solid lines)
+
+The above two controls are incremented by 1, if set, for each file plotted.
+
+PARMS[6]: T Log base
+PARMS[7]: Y Log base
+ 
+PARMS[8]: T-Axis End point labeling (1's LOWER, 10's HIGHER)
+PARMS[9]: Y-Axis End point labeling (1's LOWER, 10's HIGHER)
+
+PARMS[10]: Numeric Label Control
+              1's Y-Axis Vertical Numbers (default)
+             10's T-Axis Horizontal Numbers (default)
+            100's Invert Y-Axis if set
+           1000's Invert T-Axis if set
+
+`
+
+`DBSCALE: Task to Change the Scaling of an Existing Data File
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+TRANGE		New Time Range or offset
+YRANGE		New Amplitude Range or offset
+ZRANGE		Complex Offset
+CODE		   0-> Scale to New Ranges
+		   1-> Add offsets
+		   2-> Multiply by...
+		   3-> Divide by...
+		   4-> Divide into dividend
+		   5-> Set start time to zero
+
+This task is used to scale all the data in a file. Both the time and amplitude scales can be modified, so there is some duplication with the DBMOD task. See DBMOD for a more extensive list of ways to modify the amplitude values.
+
+If CODE = 0, then TRANGE and YRANGE are used to determine the new time and amplitude scaling (ZRANGE is not used when CODE = 0). The new file will have time and data values adjusted to these new scales using a simple linear transformation. If TRANGE[2] <= TRANGE[1] then the time base is not changed. If YRANGE[2] <= YRANGE[1] then the amplitude range is not changed. 
+
+If CODE = 1 then the time base is offset by TRANGE[1] and the amplitude for real data files is offset by YRANGE[1]. Complex files will have their data offset by ZRANGE, where ZRANGE[1] is added to the real component and ZRANGE[2] is added to the imaginary term. If any particular scaling value is zero then that element is not scaled.
+
+If CODE = 2 then the time base is multiplied by TRANGE[1] and the amplitude for real data files is multiplied by YRANGE[1]. Complex files will have their data scaling by ZRANGE which is treated as a complex value. If any particular scaling value is zero then that element is not scaled.
+
+If CODE = 3 then the time base is divided by TRANGE[1] and the amplitude for real data files is divided by YRANGE[1]. Complex files will have their data scaling by ZRANGE which is treated as a complex value. If any particular scaling value is zero then that element is not scaled.
+
+If CODE = 4 then the time base is divided into TRANGE[1] and the amplitude for real data files is divided into YRANGE[1]. Complex files will divide into ZRANGE which is treated as a complex value. If any particular scaling value is zero then that element is not scaled. This scaling will reverse the sense of the data in terms of both time and amplitude. For time series files, where the time base is determined by a simple linear transformation of the data index number in the file, the new time base requires a non-linear transformation from the old one so time series files are converted to time labeled files to accommodate this issue. You should run DBSORT on files that have their time scaling inverted.
+
+If CODE = 5 then the time base is offset by the minimum time value, which has the effect of making the lowest time value zero.
+
+To change the time scale factors of time series files directly, rather than using this task, use GETHEAD to retrieve the time scale slope and intercept values into the TRANGE adverb.  Modify TRANGE and use PUTHEAD to update the file header.
+
+The infile of this task accepts wild cards.
+`
+
+`DBSMOOTH: Task to Perform Data Smoothing
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+FACTOR		Smoothing Coefficient
+CODE		Smoothing Operation Code
+		   0 -> Kalman Filter
+		   1 -> Boxcar
+
+Two types of simple data smooths can be performed.  For the Kalman filter CODE = 0, and FACTOR is the Kalman coefficient which lies between 0 and 1, exclusive.  For the boxcar smooth, FACTOR is the number of data points to be included in the boxcar smoothing window.  The Kalman filter is given by
+
+	V(n) = (1.0 - f) * Y(n-1) + f * Y(n)
+
+where f is the Kalman coefficient entered in FACTOR.
+
+The boxcar smooth (CODE equals 1) is a central point running average type smooth.  FACTOR is the width of the averaging box specified by the number of data points.
+
+In both methods, the first data point is not modified.
+
+The infile of this task accepts wild cards.
+`
+
+`DBSUBSET: Task to Take a Subset of a Existing Data File
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+TRANGE		Time Range
+YRANGE		Amplitude Range
+CODE		Edit Control Codes
+
+This task allows the user to take a subset of a data file.  The CODE adverb controls how the data will be edited.  With the exceptions of CODE 6 and CODE 7, if the low value of TRANGE or YRANGE is greater than or equal to the high value, then the entire range is selected.
+
+CODE 0: Delete values outside the specified time range, exclusive.
+
+CODE 1: Delete values inside the specified time range, inclusive.
+
+CODE 2: Delete values outside the specified amplitude range, exclusive.
+
+CODE 3: Delete values inside the specified amplitude range, inclusive.
+
+CODE 4: Delete values that are outside both the specified time and amplitude ranges, exclusive.
+
+CODE 5: Delete values that are inside both the specified time range and amplitude ranges, inclusive.
+
+CODE 6: Delete All duplicate values inside or outside a time range for time labeled data (time series data cannot have duplicate time stamps by definition)
+
+CODE 7: Delete duplicate values inside or outside a time range for sorted time labeled data (time series data cannot have duplicate time stamps by definition)
+
+CODE 8: Save TRANGE[2] records starting at record number TRANGE[1] (zero indexed)
+
+For CODE 4 and CODE 5, both time and amplitude conditions must be met for the point to be deleted.
+
+When CODE 6 is used, data with duplicate time stamps are removed, meaning that if there are two points with the same time stamp then both points are deleted. If TRANGE[0] = TRANGE[1] then all the data are searched. If TRANGE[0] < TRANGE[1] then only data within that time range (inclusive) are searched. If TRANGE[0] > TRANGE[1] then only data outside of those time stamps (inclusive) are searched. No assumptions are made about the time sorted order of the file so this removal process is of order O(N²), therefore even modest sized files can take a while.
+
+When CODE 7 is used, data with a duplicate time stamp are removed, meaning that if there are two points with the same time stamp, then only the second one is deleted. If TRANGE[0] = TRANGE[1] then all the data are searched. If TRANGE[0] < TRANGE[1] then only data within that time range (inclusive) are searched. If TRANGE[0] > TRANGE[1] then only data outside of those time stamps (inclusive) are searched. The dataset must be sorted in the range that is being searched. If the file is found not to be time ordered then the task will abort.
+
+When CODE 8 is used TRANGE[1] and TRANGE[2] represent integer values (they are not truncated however) which are interpreted to be record numbers in the file. TRANGE[2] data records are saved starting at number TRANGE[1]. For example, if TRANGE is 10,100 then data records 10 through 109 would be written out, so there would be 100 records in the new file.
+
+When a subset of a time labeled file is taken, the data points that are out of range are simply removed.
+
+When a time series file is chopped, data points will be flagged as invalid, with the exceptions of CODE 0 and CODE 8 where they are removed.
+
+The infile of this task accepts wild cards.
+`
+
+`DBTRANS: Task for Applying Transcendental Functions to a Data File
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME_	Output file root name
+OUTCLASS_	Output file extension
+OUTPATH_	Output file drive and directory
+CODE		Function Control Codes
+		   0 -> sine
+		   1 -> cosine
+		   2 -> tangent
+		   3 -> arcsine
+		   4 -> arccosine
+		   5 -> arctangent
+		   6 -> Hyperbolic sine
+		   7 -> Hyperbolic cosine
+		   8 -> Hyperbolic tangent
+		   9 -> Inverse Hyperbolic sine
+		   10-> Inverse Hyperbolic cosine
+		   11-> Inverse Hyperbolic tangent
+
+This task will apply trigonometric or hyperbolic functions to a data file.
+
+The infile of this task accepts wild cards.
+`
+
+`DBX: Task to Extract Components of a Complex Data File
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+CODE		Extraction Control Codes
+		   0 -> Extract Amplitude
+		   1 -> Extract Phase
+		   2 -> Extract Real Part
+		   3 -> Extract Imaginary Part
+
+This task is used to extract the amplitude, phase, real, or imaginary part of a complex data file and write it to a real data file.  This task is most useful after performing a Fourier Transform with either FFT, DFT, FIT, or DCDFT.
+
+The infile of this task accepts wild cards.
+`
+
+`DCDFT: Task to Perform a Data Compensated Discrete Fourier Transform
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+TRANGE		Frequency Range
+FACTOR		Number of Integration Points
+CODE		Transform Control Codes
+		   0 -> DCDFT
+		   1 -> Inverse DCDFT
+		   2 -> Apply Filter
+		   3 -> Report filter information only
+
+This task performs a Data Compensated Discrete Fourier Transform as described by Ferraz-Mello, 1981, Astronomical Journal, 86, p. 619.  The input parameters are for the frequency range for the integration (TRANGE) and the number of integration points (FACTOR).  The mean value is NOT subtracted before the transform (see DBMOD).  See the FIT task for more information about Fourier integral transforms.
+
+If filtering is selected, then TRANGE[0] is the frequency to be filtered out of the data set. If CODE=3 then the amplitude and phase of what would be the filtered signal are reported, but no file is created.
+
+This transform is scaled to yield a signal of amplitude 1 for a single sine wave of the form sin(t).
+
+The infile of this task accepts wild cards.
+`
+
+`DFT: Task to perform a Discrete Fourier Transform
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+CODE		Transform Control Codes
+		   0 -> DFT
+		   1 -> Inverse DFT
+
+
+This task performs a Discrete Fourier Transform on a time series file (time labeled files cannot be processed) to create a complex time series file.  The mean value is NOT subtracted before the transform is performed (see DBMOD).
+
+The transform is performed by
+
+	F(ν) = 2/N ∑(f(t(n)) exp(-i 2 π t(n) (ν/N))
+
+which is summed from n=0 to N - 1.  For the Inverse transform i is replaced with -i and 2/N is changed to 1/2.  See the FIT task for more information about Fourier integral transforms.
+
+The frequency range for the DFT is the fundamental frequency to twice the Nyquist frequency.  It must be remembered, however, that the results above the Nyquist frequency are simply a reflection of the first half of the plot.  This range results in the "standard grid" for the DFT.
+
+This transform is scaled to yield a signal of amplitude 1 for a single sine wave of the form sin(t).
+
+The infile of this task accepts wild cards.
+`
+
+`FFT: Task to perform a Fast Fourier Transform
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+CODE		Transform Control Codes
+
+This task performs a Fast Fourier Transform on a time series file (time labeled files cannot be processed) to create a complex time series file (See Ronald N. Bracewell "The Fourier Transform and its Applications").  The data set should contain a power of 2 data points (i.e. 2, 4, 8, 16...) or it will be padded with zeros.  The resultant output file is the complex FFT as a function of frequency.  The mean value is NOT subtracted before the transform (see DBMOD).  See the DFT task for more information about the Discrete Fourier Transform.
+
+The frequency range for the FFT is the fundamental frequency to twice the Nyquist frequency.  It must be remembered, however, that the results above the Nyquist frequency are simply a reflection of the first half of the plot.  This range results in the "standard grid" for the FFT.
+
+This transform is scaled to yield a signal of amplitude 1 for a single sine wave of the form sin(t).
+
+The FFT tasks differs from most others in that it requires that the entire data set fit into memory. If the file is too large for memory, then the transform will fail.
+
+The infile of this task accepts wild cards.
+`
+
+`FIT: Task to perform a Fourier Integral Transform
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+TRANGE		Frequency Range
+FACTOR		Number of Integration Points
+CODE		Transform Control Codes
+		   0 -> Fourier Integral Transform
+		   1 -> Inverse Fourier Integral Transform
+
+This task performs a Fourier Integral Transform on a time series or time labeled data file to create a complex time series file.  The mean value is NOT subtracted before the transform (see DBMOD). You can specify any frequency range for the integration along with the number of points to calculate in that range. The integral transform is given by:
+
+	F(ν) = 2/N ∫(f(t) exp(-i 2π ν t) dt
+
+and in done using a simple trapezoidal rule integration. For the Inverse transform i is replaced with -i and 2/N is changed to 1/2.
+
+The default number of output points is equal to the number of input points. The default frequency window is from the Fundamental frequency to 2 * Nyquist frequency. If the data are not evenly spaced, then these frequencies are estimated by the largest and smallest time differences.
+
+This transform is scaled so that it yields a signal of amplitude 1 for a single sine wave of the form sin(t).
+
+The infile of this task accepts wild cards.
+`
+
+`IMEAN: Task to Display Data Ranges, Mean and Deviation
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+TRANGE		Time Range to Process
+TFORMAT		Time Data Display Format
+YFORMAT		Amplitude Data Display Format
+CODE		Completion Control Codes
+
+This task operates on a specified time range of the data and it will display the first maximum and minimum along with their sequential position in the file and the corresponding time of occurrence.  The mean and standard deviation will also be displayed.  If the beginning is greater than or equal to the ending time, then the entire data file will be used.  The final output displays minimum and maximum information for the entire file and the selected time range.  For complex data files, the minimum and maximum values are based on the magnitude of the data vectors.
+
+Through the use of the CODE adverb, it is possible to automatically extract the mean, first minimum, and first maximum values in the selected time range.  When the first minimum and first maximum are returned, the time of the data point and the bracketing times are also retrieved.
+
+The infile of this task accepts wild cards.
+`
+
+`KALMAN: Task to Perform a Kalman Filter Data Redistribution
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH_	Output file drive and directory
+FACTOR		Number of Output Points  (Default is N)
+CODE		POINT Adverb Control Code
+			0 -> POINT[1] is % Error
+			1 -> POINT[1] is RMS Error
+			2 -> POINT is r, q
+POINT		Input Value for r and q
+
+This task will redistribute data in real data files and create an evenly spaced time series file using the bidirectional Kalman filter technique as defined by Jurkevich, I., William, W.W. and Petty, A.F. 1976, Astrophysics and Space Science, 44, p. 63.  Note that there are some errors in the derivations in this paper.  The corrections were published by Nelson,E.R. 1985 in Cool Stars, Stellar Systems, and the Sun, 254, p. 287.
+
+Two factors are used by the routine, r and q.  The first value, r, represents the variance of the noise in the data and is best approximated by the root mean square (RMS) error in the data.  The q factor is best approximated by
+
+q = max s(i)² [t(i+1) - t(i)]
+
+where s(i) is the slope between t(i+1) and t(i).  This is the default value determined by the task.  Since the RMS error in the data cannot be known by the program, this information must be supplied by the user.
+
+If FACTOR is less than 2 then it is set equal to the number of points in the file.
+
+If CODE = 0 then POINT[0] is % error and POINT[1] is not used
+If CODE = 1 then POINT[0] is RMS error and POINT[1] is not used
+If CODE = 2 then POINT[0] is r and POINT[1] is q
+
+The infile of this task accepts wild cards.
+`
+
+`PGRAM: Task to Calculate the Modified Scargle Periodogram
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+TRANGE		Frequency Range
+FACTOR		Number of Output Points
+CODE		Output Scaling Control Code
+		   0 -> No Scaling
+		   1 -> Scale by variance
+		   2 -> Scale as probability
+
+This task is used to calculate the periodogram of a data file as described by Horne J.H. and Baliunas S.L., 1986, Astrophysical Journal, 302, p. 757 based on the paper by Scargle,J.D. 1982, Astrophys. Jour., 263, 835.
+
+Unlike the Fourier transform tasks, the mean value is subtracted before the transform.
+
+The default outclass is 'pgm'. CODE controls the scaling. 0 is no scaling, 1 scales by variance, and 2 by probability. The scaling value of 1 is the most useful. The default frequency range is from the estimated fundamental frequency to twice the estimated Nyquist frequency. The default number of output points is equal to the number of input points.
+
+The infile of this task accepts wild cards.
+`
+
+`CLS: Verb to clear the display window
+
+CLS executes the system "clear" command to clear the display window.
+
+`
+
+`CATALOG: Pseudoverb to display a file directory
+
+CATALOG accepts a regular expression as an argument. If no argument is given then ^.* is assumed, which will list all files in the directory. The CATALOG pseudoverb will create the same list of files as those tasks that can process multiple files at a time (which is all of them). See the help on EXPRESSIONS for more details on regular expressions. CATALOG will also accept a '?' as a wild card for "any character" to be more compatible with the usual directory listing commands. Use CATALOG to test the use of wild cards to get the desired list of files in those tasks that use them.
+
+`
+
+`DBBLOCK: Task to accumulate data into blocks
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+FACTOR		Block Size in Counts or Time
+CODE		FACTOR Interpretation Control Code
+PARMS		PARMS[1] is the allowable time jitter
+
+This task will take data and add up values in blocks by using either a count of the number of data points or a time window. When adding up by count, FACTOR points of data are simply added together. The time for the new accumulated point will be the time of the first point in the run. For time series files the header slope value will be multiplied by FACTOR. If the total number of points is not divisible by FACTOR, then the incomplete block is discarded.
+
+When CODE != 0, a block is accumulated within a time interval specified by FACTOR. For example, if FACTOR is 60 and the time units are seconds, then blocks will accumulate for 60 seconds. For time labeled files, there can be jitter in the time values. The PARMS[1] value can account for this jitter. Time blocks that are within the FACTOR +/- PARMS[1] are considered valid. If a block falls short by more than PARMS[1] time increments, then that run is discarded. For time series files the header slope value will be set to FACTOR.
+
+The infile of this task accepts wild cards.
+
+`
+
+`HISTO: Task to do a histogram analysis of a data file
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+FACTOR		Multiplication factor
+
+This task will take the amplitude values of a data file, multiply them by FACTOR, unbiasedly round them to the nearest integer and then count up the number of times each value occurs. The output file is a real time series between the minimum and maximum rounded values. If FACTOR is zero it is set to 1. No other modifications are made. The scaling for the time has a y-intercept of the minimum rounded value and the slope is 1/FACTOR.
+
+The infile of this task accepts wild cards.
+
+`
+
+`DBSORT: Task to sort a time-labeled file based on time
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+
+This task will perform a quick sort on the input file based on the time stamps. Both real and complex time labeled files can be sorted. All data must be able to fit into memory at one time. Only time labeled files can be sorted (times series files are sorted by definition). The default output file is the input file so this task will usually replace the unsorted file with the sorted one.
+
+The infile of this task accepts wild cards.
+
+`
+
+`SYSTEM: Executes a unix system command
+
+This pseudoverb simply passes the argument that follows it to the unix shell by calling the C-language system() function. For example, if you want to know the current working directory you would enter
+
+system pwd
+
+`
+
+`CONFIG: Verb to configure system specific elements of the CLI
+
+This is a legacy command and is not implemented at this time (it does nothing).
+
+`
+
+`DBFIT: Task to fit functions to a data set
+
+Inputs		Description
+===========	==========================================
+INNAME		Input file root name
+INCLASS		Input file extension
+INPATH		Input file drive and directory
+OUTNAME		Output file root name
+OUTCLASS	Output file extension (default is 'dbfit')
+OUTPATH		Output file drive and directory
+CODE		Edit Control Codes
+ITYPE		Function selection
+FACTOR		Order of a polynomial fit (<10)
+TRANGE		Time Range (default is all)
+YRANGE		Amplitude Range (default is all)
+PARMS		Initial guess for the parameter q[] values
+POINT		Max Iterations, Minimum Error
+ZFACTOR		Lambda Start, Lambda Min
+TMAJOR		Lambda Down Factor, Lambda Up Factor
+YMAJOR[1]	Differential Factor
+
+This task allows the user to fit functions to a real data set using values in the ranges of TRANGE and YRANGE (complex data cannot be fit at this time). The task uses a least squares minimization technique to perform the fit (gradient descent). The CODE adverb is used to control what the task does after it reports the outcome of the fit. ITYPE selects which function to use for the fit. New functions are added by programming them into the DBFIT code base.
+
+Only data that fall within the limits of TRANGE and YRANGE (inclusive) are part of the fit. If TRANGE[1]>=TRANGE[2] then the entire time domain is used. If YRANGE[1]>=YRANGE[2] then the entire amplitude range is used.
+
+CODE
+1: Update the PARMS values with the new q[] parameters and write them out to the DBFIT inputs file.
+
+2: Create an output file for the fit using the same time domain. The output file is real time-stamped. The default OUTCLASS is 'dbfit'. If the output file has the same fully qualified name as the input file, then a warning will be issued and no file will be created.
+
+3: Do both CODE 1 and 2
+
+ITYPE
+0: Polynomial of order FACTOR
+	q[0] * t^n + ... + q[n-2] * t² + q[n-1] * t + q[n]
+
+FACTOR must be in the range 1 to 9, inclusive. If FACTOR = 1 or 2 (linear or quadratic) then the closed form fit is found rather than using steepest descent.
+
+1: Gaussian (note that q[2] is the inverse of the deviation)
+	q[0] * exp(-(t - q[1])² * q[2]²) + q[3]
+
+2: Double Gaussian (note that q[2] and q[5] are the inverse of the deviations)
+	q[0] * exp(-(t - q[1])² * q[2]²) +
+	q[3] * exp(-(t - q[4])² * q[5]²) + q[6]
+
+3: Exponential	
+	q[0] * exp(-t * q[1]) + q[2]
+
+4: Sine
+	q[0] * sin(q[1] t + q[2]) + q[3]
+
+The PARMS adverb holds the initial guess for the q[] parameter values and if CODE is 1 or 3 that adverb will be updated with the new q[] values.
+
+The adverbs POINT, ZFACTOR, TMAJOR, and YMAJOR are used to control aspects dealing with the least squares fit.
+
+POINT[1]   - The maximum number of iterations before the code terminates.
+             Default is 100,000.
+POINT[2]   - The minimum value of the RMS error below which the code terminates. Error = sqrt((∑(T(i) - F(x(i)))²)/N) where T(i) is the data value for point i, x(i) is the x value for point i and F(x) is the return value of the function for the value x and N is the number of data points. 
+             Default value is 0.0.
+ZFACTOR[1] - The initial learning factor value.
+             Default is 0.001.
+ZFACTOR[2] - The minimum learning factor value below which the code terminates.
+             Default value is 0.0.
+TMAJOR[1]  - The factor by which the learning factor is decreased. Must be >= 1.0.
+             Default is 1.001.
+TMAJOR[2]  - The factor by which the learning factor is increased. Must be >= 1.0.
+             Default is 1.0001.
+YMAJOR[1]  - The factor used for taking the partial derivatives.
+             Default is 1e-6.
+
+If both TMAJOR[1] and TMAJOR[2], which are the learning factor divisor/multiplier, are less than or equal to one, then the learning factor is not adjusted.
+
+With the exception of linear and quadratic functions, the fit is performed through steepest descent to minimize the error function E by adjusting the function parameters q[], where
+
+E = ½∑(Y[t] - f(q[];t))²
+∆q[i] = -λ ∂E/∂q[i]
+∂E/∂q[i] = -∑(Y[t] - f(q[];t)) ∂f(q[];t)/∂q[i]
+∂f(q[];t)/∂q[i] = (f(q[], q[i] + δ q[i];t) - f(q[], q[i] - δ q[i];t))/ (2 δ q[i])
+
+where λ is the learning factor and δ is the factor used for taking the partial derivatives.
+
+If either TMAJOR[1] or TMAJOR[2] are greater than 1 (which is the default behavior), then adaptive learning is enabled. If the error decreases then λ is multiplied by TMAJOR[2] to speed up convergence. If the error goes up, then λ is divided by TMAJOR[1] to try and not overshoot the minimum.
+
+If the dynamic range of the data values is too high, then the fit will not converge. In that case, try scaling the data to reduce the range.
+
+The initial guess should be as close as possible to the desired values to minimize the possibility of converging to a local minimum far from the desired fit. Experiment with the Gaussian fit to the histogram created in the sample RUN file by changing one parameter at a time. The final fit is relatively insensitive to the starting point of the amplitude but it is sensitive to the starting value of the inverse deviation coefficient, for example.
+
+The infile of this task accepts wild cards.
+`
+
+`DBBUILD: Task to build data files from a function
+
+Inputs		Description
+===========	==========================================
+OUTNAME		Output file root name
+OUTCLASS	Output file extension
+OUTPATH		Output file drive and directory
+CODE		Function to use
+ITYPE		Type of data file to create
+FACTOR		Number of Data Points
+TRANGE		Time range of data in the file
+PARMS		Function specific Parameters
+TITLE		Title for the new data file
+TLABEL		Time label for the new data file
+YLABEL		Y label for the new data file
+
+This task will create a data file from one of a small set of functions. You specify the name, class and path for the output file. You specify the time range for the data in the file (TRANGE) as well as how many points are to be written (FACTOR). You also set the TITLE, TLABEL and YLABEL fields for the file.
+
+The CODE adverb is used to select from the list of functions:
+
+CODE 0 - Sine     : A sin(ω t + φ)
+PARMS = A, ω, φ
+
+CODE 1 - sin(x)/x : A sinc(ω t + φ)
+PARMS = A, ω, φ
+
+CODE 2 - Exponential : A exp(B t) + C
+PARMS = A, B, C
+
+CODE 3 - Gaussian : A exp(-((t - B) * C)²) + D
+PARMS = A, B, C, D
+
+CODE 4 - Random   : (maximum - minimum)*rand(0,1] + minimum
+PARMS = minimum, maximum
+
+The ITYPE adverb is used to specify the output file type. All the files will have data that have an even time spacing, but the time labeled files will have (t,y) data pairs. For the complex files, the same function will be applied to both the real and imaginary parts.
+
+ITYPE 0 -> Real time series
+ITYPE 1 -> Real Time Labeled
+ITYPE 2 -> Complex time series
+ITYPE 3 -> Complex time labeled
+
+The PARMS adverb is used to set the parameters used in each function and are described above.
+
+`

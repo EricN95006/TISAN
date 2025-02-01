@@ -1,0 +1,11 @@
+DFT:Discrete Fourier Transform
+INNAME\
+INCLASS\
+INPATH\
+OUTNAME\
+OUTCLASS:Output Class, Default='dft'\
+OUTPATH\
+CODE:
+Transform Control Codes
+   0 -> DFT
+   1 -> Inverse DFT\
